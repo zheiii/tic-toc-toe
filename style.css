@@ -91,10 +91,7 @@ main p {
     margin-right: 50px;
 }
 
-.scores #player1,
-.scores #player2 {
-    font-weight: bold;
-}
+
 
 main .gameboard {
     width: var(--GAMEBOARD-SIDE);
