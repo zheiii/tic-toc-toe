@@ -1,13 +1,19 @@
 const gameCells = document.querySelectorAll('.gamecell');
-const resetButton = document.querySelector('main button');
+const resetGameboardButton = document.querySelector('.resetGameboard');
+const resetScoresButton = document.querySelector('.resetScores')
 
 const namesDialog = document.querySelector('.names-dialog');
 const namesDialogButton = namesDialog.querySelector('button');
 
 const Player = (name, symbol) => {
+    let score = 0
+
     const getSymbol = () => symbol;
     const getName = () => name;
-    return {getSymbol, getName};
+    const getScore = () => score
+    const incrementScore = () => score++
+    const clearScore = () => {score = 0}
+    return {getSymbol, getName, getScore, incrementScore, clearScore};
 }
 
 //Inicialization of Players
@@ -20,6 +26,7 @@ namesDialogButton.addEventListener('click', (event) => {
         event.preventDefault(); // Don't want to submit this form
         const player1 = Player(player1Name.value, 'X');
         const player2 = Player(player2Name.value, 'O');
+
         namesDialog.close();
         gameInitialization(player1, player2);
     } 
@@ -119,10 +126,13 @@ function gameInitialization(player1, player2) {
         return {addToArray, clearArray, checkWinner};
     
     })();
-    
-    
+
     const displayController = (() => {
-        const playerTurnTitle = document.querySelector('main p');
+        const playerTurnTitle = document.querySelector('.turns');
+        const player1ScoreTitle = document.getElementById('player1');
+        const player1Score = document.getElementById('player1-score');
+        const player2ScoreTitle = document.getElementById('player2');
+        const player2Score = document.getElementById('player2-score');
         const winnerDialog = document.querySelector('.result-dialog');
         const winnerDialogMessage = winnerDialog.querySelector('h1');
     
@@ -140,26 +150,43 @@ function gameInitialization(player1, player2) {
         const changePlayerTurnTitle = (message) => {
             playerTurnTitle.textContent = message;
         }
+
+        const showPlayerScoreTitle = () => {
+            player1ScoreTitle.textContent = `${player1.getName()}:`
+            player2ScoreTitle.textContent = `${player2.getName()}:`
+        }
+
+        const updateScores = () => {
+            player1Score.textContent = player1.getScore();
+            player2Score.textContent = player2.getScore();
+        }
     
         const showResultDialog = (message) => {
             winnerDialogMessage.textContent = message;
             winnerDialog.showModal();
+        }
+
+        const cleanScoreboard = () => {
+            player1.clearScore()
+            player2.clearScore()            
         }
     
         const cleanGameboard = () => {
             gameCells.forEach(cell => {cell.textContent = ''})
         }
     
-        return {addPlayerSymbol, changePlayerTurnTitle, showResultDialog, cleanGameboard};
+        return {addPlayerSymbol, changePlayerTurnTitle, showPlayerScoreTitle, updateScores, showResultDialog, cleanGameboard, cleanScoreboard};
         
     })();
     
     const game = ((firstPlayer, secondPlayer) => {
+
         let currentPlayer = firstPlayer;
         let gameEnded = false;
     
         //Initialization of PlayerTurnTitle
         displayController.changePlayerTurnTitle(`${currentPlayer.getName()}'s Turn`);
+        displayController.showPlayerScoreTitle();
     
     
         const makePlayerMove = (cell, player) => {
@@ -191,6 +218,8 @@ function gameInitialization(player1, player2) {
                 const winnerPlayer = parseSymbolToPlayer(winnerObj.winnerSymbol, player1, player2);
                 const message = `${winnerPlayer.getName()} Wins!`;
                 displayController.showResultDialog(message);
+                winnerPlayer.incrementScore();
+                displayController.updateScores();
                 res.gameEnded = true;
             }
             else if (winnerObj.tie) {
@@ -223,14 +252,22 @@ function gameInitialization(player1, player2) {
             displayController.cleanGameboard();
             gameBoard.clearArray();
             displayController.changePlayerTurnTitle(`${currentPlayer.getName()}'s Turn`);
+            
             gameEnded = false;
         }
+
+        const cleanScores = function() {
+            displayController.cleanScoreboard()
+            displayController.updateScores()
+            game.cleanGame()
+        }
     
-        return {doPlayerTurn, cleanGame};
+        return {doPlayerTurn, cleanGame, cleanScores};
     
     })(player1, player2);
         
-    resetButton.addEventListener('click', game.cleanGame);
+    resetGameboardButton.addEventListener('click', game.cleanGame);
+    resetScoresButton.addEventListener('click', game.cleanScores);
     
     gameCells.forEach(cell => {
         cell.addEventListener('click', game.doPlayerTurn);

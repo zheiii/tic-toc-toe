@@ -11,6 +11,7 @@
     --NAMES-DIALOG-WIDTH: min(85vw, 700px);
     --HEADER-WIDTH: min(90vw, 550px);
     --GAMEBOARD-SIDE: min(90vw, 470px);
+    --SCOREBOARD-WIDTH: min(90vw, 400px);
 
     --TITLE-FS: clamp(3rem, 13vw, 4.5rem);
     --TURN-MSG-FS: clamp(1.5rem, 10vw, 2.5rem);
@@ -64,6 +65,37 @@ main p {
     font-size: var(--TURN-MSG-FS);
 }
 
+.scores::before {
+    content: "Scoreboard";
+    display: block;
+    text-align: center;
+    font-size: var(--TURN-MSG-FS);
+    font-weight: bold;
+    margin-bottom: 15px; 
+    color: var(--ACCENT-COLOR); 
+}
+
+.scores {
+    margin: 0 auto;
+    margin-bottom: 15px;
+    padding: 20px 0;
+    width: var(--SCOREBOARD-WIDTH);
+    text-align: center;
+    font-size: var(--TURN-MSG-FS);
+    background-color: var(--LIGHT-COLOR);
+    color: #333;
+    border-radius: 5px;
+}
+
+.scores #player1-score {
+    margin-right: 50px;
+}
+
+.scores #player1,
+.scores #player2 {
+    font-weight: bold;
+}
+
 main .gameboard {
     width: var(--GAMEBOARD-SIDE);
     height: var(--GAMEBOARD-SIDE);
@@ -94,20 +126,24 @@ main .gameboard {
 }
 
 main button {
-    display: block;
     font: inherit;
-    font-size: 1.2rem;
     font-weight: 500;
-    margin: 0 auto;
     padding: 20px 70px;
     border: none;
     border-radius: 10px;
     background-color: var(--LIGHT-COLOR);
     cursor: pointer;
+    margin: 10px; 
 }
 
 main button:hover {
     background-color: var(--EXTRA-LIGHT-COLOR);
+}
+
+.reset-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 20px; 
 }
 
 /* DIALOG */
@@ -137,6 +173,8 @@ dialog::backdrop {
     font-size: var(--RESULT-DIALOG-FS);
     font-weight: 700;
 }
+
+
 
 /* --- NAMES DIALOG */
 
