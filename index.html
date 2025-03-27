@@ -13,7 +13,11 @@
     </header>
 
     <main>
-        <p>Turn</p>
+        <p class="scores">
+            <span id="player1">player1:</span><span id="player1-score">0</span>   
+            <span id="player2">player2:</span><span id="player2-score">0</span>
+        </p>
+        <p class="turns">Turn</p>
         <div class="gameboard">
             <div class="gamecell" data-position="0"></div>
             <div class="gamecell" data-position="1"></div>
@@ -25,7 +29,12 @@
             <div class="gamecell" data-position="7"></div>
             <div class="gamecell" data-position="8"></div>
         </div>
-        <button type="button">Reset</button>
+        <div class="reset-buttons">
+            <button class="resetGameboard">Reset gameboard</button>
+            <button class="resetScores">Reset scoreboard</button>
+        </div>
+        
+        
     </main>
 
     <dialog class="names-dialog">
